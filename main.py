@@ -1,5 +1,7 @@
 import pygame
 import os
+import sys
+pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
@@ -161,6 +163,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+                sys.exit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_g and len(yellow_bullets) < MAX_BULLETS:
