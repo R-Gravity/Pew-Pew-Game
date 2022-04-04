@@ -10,7 +10,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Pew Pew Game')
 
 WHITE = (255, 255, 255)
-BLACK = (155, 0, 50)
+BLACK = (0, 0, 0)
+BORDO = (155, 0, 50)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
@@ -53,13 +54,21 @@ BIG_BULLET_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets
 
 def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets):
     WIN.blit(BACKGROUND, (0, 0))
-    pygame.draw.rect(WIN, BLACK, BORDER)
+    pygame.draw.rect(WIN, BORDO, BORDER)
     red_health_text = HEALTH_FONT.render(
         str(int(red_health/15*100))+'%', 1,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
-        str(int(yellow_health/15*100))+'%', 1, BLACK)
+        str(int(yellow_health/15*100))+'%', 1, BORDO)
+
+    #health bars
+    pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
+    pygame.draw.rect(WIN, BLACK, (pygame.Rect(721, 21, 148, 23)))
+    pygame.draw.rect(WIN, WHITE, (pygame.Rect(18, 18, 154, 29)))
+    pygame.draw.rect(WIN, BLACK, (pygame.Rect(21, 21, 148, 23)))
+
     pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*10, 25)))
     pygame.draw.rect(WIN, YELLOW, (pygame.Rect(20, 20, yellow_health * 10, 25)))
+
     WIN.blit(red_health_text, (722, 18))
     WIN.blit(yellow_health_text, (22, 18))
 
