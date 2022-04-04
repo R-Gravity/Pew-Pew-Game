@@ -19,7 +19,7 @@ BORDER = pygame.Rect(WIDTH//2 - 5, 0, 10, HEIGHT)
 BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gun+Silencer.mp3'))
 
-HEALTH_FONT = pygame.font.SysFont('Arial', 30)
+HEALTH_FONT = pygame.font.SysFont('Arial', 23)
 WINNER_FONT = pygame.font.SysFont('Arial', 100)
 
 FPS = 60
@@ -54,13 +54,15 @@ BIG_BULLET_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets
 def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets):
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
-
     red_health_text = HEALTH_FONT.render(
-        'Health: ' + str(red_health), 1,  (240, 0, 50))
+        str(int(red_health/15*100))+'%', 1,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
-        'Health: ' + str(yellow_health), 1, (240, 240, 0))
-    WIN.blit(red_health_text, (760, 10))
-    WIN.blit(yellow_health_text, (20, 10))
+        str(int(yellow_health/15*100))+'%', 1, BLACK)
+    pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*10, 25)))
+    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(20, 20, yellow_health * 10, 25)))
+    WIN.blit(red_health_text, (722, 18))
+    WIN.blit(yellow_health_text, (22, 18))
+
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
