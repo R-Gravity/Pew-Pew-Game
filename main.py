@@ -5,9 +5,7 @@ import random
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
-
-#exesss testing 
-#and a new one 
+ 
 
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
