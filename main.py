@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+import random
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -56,9 +57,9 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, BORDO, BORDER)
     red_health_text = HEALTH_FONT.render(
-        str(int(red_health/15*100))+'%', 1,  WHITE)
+        str(int(red_health))+'%', 1,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
-        str(int(yellow_health/15*100))+'%', 1, BORDO)
+        str(int(yellow_health))+'%', 1, BORDO)
 
     #health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
@@ -66,8 +67,8 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(18, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(21, 21, 148, 23)))
 
-    pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*10, 25)))
-    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(20, 20, yellow_health * 10, 25)))
+    pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*1.5, 25)))
+    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(20, 20, yellow_health * 1.5, 25)))
 
     WIN.blit(red_health_text, (722, 18))
     WIN.blit(yellow_health_text, (22, 18))
@@ -163,8 +164,8 @@ def main():
     yellow_b_bullets = []
     red_b_bullets = []
 
-    red_health = 15
-    yellow_health = 15
+    red_health = 100
+    yellow_health = 100
 
     clock = pygame.time.Clock()
     run = True
@@ -200,17 +201,27 @@ def main():
                     BULLET_FIRE_SOUND.play()
 
             if event.type == RED_HIT:
-                red_health -= 1
-                BULLET_HIT_SOUND.play()
+                crit_chance = random.randrange(1, 100)
+                if crit_chance in range(0, 11):
+                    red_health -= 6
+                    BULLET_HIT_SOUND.play()                 
+                else:
+                    red_health -= 4
+                    BULLET_HIT_SOUND.play()
             if event.type == RED_BIG_HIT:
-                red_health -= 3
+                red_health -= 9
                 BULLET_HIT_SOUND.play()
 
             if event.type == YELLOW_HIT:
-                yellow_health -= 1
-                BULLET_HIT_SOUND.play()
+                crit_chance = random.randrange(1,100)
+                if crit_chance in range(0, 11):
+                    yellow_health -= 6
+                    BULLET_HIT_SOUND.play()
+                else:
+                    yellow_health -= 4
+                    BULLET_HIT_SOUND.play()
             if event.type == YELLOW_BIG_HIT:
-                yellow_health -= 3
+                yellow_health -= 9
                 BULLET_HIT_SOUND.play()
 
         winner_text = ''
