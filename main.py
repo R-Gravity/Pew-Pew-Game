@@ -61,17 +61,17 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     yellow_health_text = HEALTH_FONT.render(
         str(int(yellow_health))+'%', 1, BORDO)
 
-    #health bars
+    # red health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(721, 21, 148, 23)))
-    pygame.draw.rect(WIN, WHITE, (pygame.Rect(18, 18, 154, 29)))
-    pygame.draw.rect(WIN, BLACK, (pygame.Rect(21, 21, 148, 23)))
-
     pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*1.5, 25)))
-    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(20, 20, yellow_health * 1.5, 25)))
+    #yellow health bars
+    pygame.draw.rect(WIN, WHITE, (pygame.Rect(28, 18, 154, 29)))
+    pygame.draw.rect(WIN, BLACK, (pygame.Rect(31, 21, 148, 23)))
+    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(30, 20, yellow_health * 1.5, 25)))
 
     WIN.blit(red_health_text, (722, 18))
-    WIN.blit(yellow_health_text, (22, 18))
+    WIN.blit(yellow_health_text, (32, 18))
 
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
@@ -80,7 +80,7 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     for bullet in red_bullets:
         pygame.draw.rect(WIN, RED, bullet)
     for bullet in red_b_bullets:
-            #pygame.draw.rect(WIN, RED, bullet)
+        #pygame.draw.rect(WIN, RED, bullet)
         WIN.blit(BIG_BULLET_IMAGE, (bullet.x, bullet.y))
 
     for bullet in yellow_bullets:
