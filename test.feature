@@ -1,7 +1,7 @@
 @smoke 
-Background: one should be enough
+Background: This is fot testing Gerkhin as well
 
-Given user wants whatever
+Given user knows "gerkhin" syntax
 And user buys whatever
 And yada yada 
 When booom 

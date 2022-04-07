@@ -11,6 +11,7 @@ WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Pew Pew Game')
 
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 BORDO = (155, 0, 50)
@@ -52,16 +53,19 @@ BACKGROUND_IMAGE = pygame.image.load(os.path.join('Assets', 'space.png'))
 BACKGROUND = pygame.transform.scale(BACKGROUND_IMAGE, (WIDTH, HEIGHT))
 
 BIG_BULLET_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Big_bullet.png')), (20, 20))
+CRIT_HIT_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Crit_hit.png')), (30, 30))
 
 
-def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets):
+def draw_window(red, yellow, red_bullets, yellow_bullets, red_health,
+ yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit):
+    
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, BORDO, BORDER)
     red_health_text = HEALTH_FONT.render(
         str(int(red_health))+'%', 1,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
         str(int(yellow_health))+'%', 1, BORDO)
-
+   
     # red health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(721, 21, 148, 23)))
@@ -81,14 +85,21 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     for bullet in red_bullets:
         pygame.draw.rect(WIN, RED, bullet)
     for bullet in red_b_bullets:
-        #pygame.draw.rect(WIN, RED, bullet)
-        WIN.blit(BIG_BULLET_IMAGE, (bullet.x, bullet.y))
+        WIN.blit((pygame.transform.rotate(BIG_BULLET_IMAGE, 180)), (bullet.x, bullet.y))
 
     for bullet in yellow_bullets:
         pygame.draw.rect(WIN, YELLOW, bullet)
     for bullet in yellow_b_bullets:
-        #pygame.draw.rect(WIN, YELLOW, bullet)
         WIN.blit(BIG_BULLET_IMAGE, (bullet.x, bullet.y))
+    
+    #displaying critical hits
+    for hit in red_crit_hit:
+        WIN.blit(CRIT_HIT_IMAGE, (red.x, red.y))        
+        red_crit_hit.remove(hit)
+    for hit in yellow_crit_hit:
+        WIN.blit(CRIT_HIT_IMAGE, (yellow.x, yellow.y))        
+        yellow_crit_hit.remove(hit)
+
 
     pygame.display.update()
 
@@ -164,6 +175,9 @@ def main():
     yellow_bullets = []
     yellow_b_bullets = []
     red_b_bullets = []
+    red_crit_hit = []
+    yellow_crit_hit = []
+    critFrame = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     red_health = 100
     yellow_health = 100
@@ -205,7 +219,8 @@ def main():
                 crit_chance = random.randrange(1, 100)
                 if crit_chance in range(0, 11):
                     red_health -= 6
-                    BULLET_HIT_SOUND.play()                 
+                    BULLET_HIT_SOUND.play()
+                    red_crit_hit += critFrame   
                 else:
                     red_health -= 4
                     BULLET_HIT_SOUND.play()
@@ -218,12 +233,13 @@ def main():
                 if crit_chance in range(0, 11):
                     yellow_health -= 6
                     BULLET_HIT_SOUND.play()
+                    yellow_crit_hit += critFrame    
                 else:
                     yellow_health -= 4
                     BULLET_HIT_SOUND.play()
             if event.type == YELLOW_BIG_HIT:
                 yellow_health -= 9
-                BULLET_HIT_SOUND.play()
+                BULLET_HIT_SOUND.play()            
 
         winner_text = ''
         if red_health <= 0:
@@ -241,8 +257,8 @@ def main():
         red_handle_movement(keys_pressed, red)
         handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets, yellow, red)
         draw_window(
-            red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets)
-
+            red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit)
+        
     main()
 
 
