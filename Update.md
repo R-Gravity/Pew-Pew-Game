@@ -10,7 +10,7 @@
     Added crit chance, minor balance changes. fixed lower edge of hitbox
 
 ### 07.04.2022: 
-    Added crit indicators, changed special bullet image.
+    Added crit indicators, changed special bullet image. ![Bullet Image](/Assets/Big_bullet.png "Special Bullet")
 
 ### 10.04.2022: 
     Game now restarts after pressing ESC, minor QoL changes.
