@@ -13,5 +13,5 @@
     Added crit indicators, changed special bullet image.
 
 ### 10.04.2022: 
-    Game now restarts after pressing __ESC__ , minor QoL changes.
+    Game now restarts after pressing ESC, minor QoL changes.
 
