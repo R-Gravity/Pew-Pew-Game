@@ -1,7 +1,7 @@
 # **Changelog**
 
 ### *SomeWhen:* 
-    Added special bullets, faster and more damage, fixsed some bugs.
+    Added special bullets, faster and more damage, fixed some bugs.
 
 ### 04.04.2022: 
     Added health bars and displayed health in %.
@@ -11,6 +11,7 @@
 
 ### 07.04.2022: 
     Added crit indicators, changed special bullet image.
+
 ### 10.04.2022: 
     Game now restarts after pressing **"ESC"**, minor QoL changes.
 
