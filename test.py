@@ -1,1 +1,1 @@
-#test file so i dont have to open jup avery time 
+#test file so i dont have to open jup every time 
