@@ -18,7 +18,7 @@ BORDO = (155, 0, 50)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
-BORDER = pygame.Rect(WIDTH//2 - 5, 0, 10, HEIGHT)
+BORDER = pygame.Rect(WIDTH//2 - 2, 0, 4, HEIGHT)
 
 BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gun+Silencer.mp3'))
@@ -158,16 +158,16 @@ def handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets,
             red_b_bullets.remove(bullet)
 
 
-def draw_winner(text):
+def draw_winner(text):    
     draw_text = WINNER_FONT.render(text, 1, WHITE)
     WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2,
                          HEIGHT//2 - draw_text.get_height()//2))
     pygame.display.update()
-    pygame.time.delay(5000)
+    pygame.time.delay(1000)    
 
 
 def main():
-    red = pygame.Rect(800, 230, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    red = pygame.Rect(800, 229, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 230, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
 
 
@@ -250,7 +250,10 @@ def main():
 
         if winner_text != '':
             draw_winner(winner_text)
-            break
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:            
+                        run = False        
 
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
