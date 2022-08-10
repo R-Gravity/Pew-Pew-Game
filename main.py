@@ -17,8 +17,10 @@ BLACK = (0, 0, 0)
 BORDO = (155, 0, 50)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+CYAN = (137, 238, 240)
 
 BORDER = pygame.Rect(WIDTH//2 - 2, 0, 4, HEIGHT)
+BORDER_FIELD = pygame.Rect(WIDTH//2 - 4, 0, 8, HEIGHT)
 
 BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gun+Silencer.mp3'))
@@ -49,7 +51,7 @@ RED_SPACESHIP_IMAGE = pygame.image.load(
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
     RED_SPACESHIP_IMAGE, (SPACESHIP_HEIGHT, SPACESHIP_WIDTH)), 270)
 
-BACKGROUND_IMAGE = pygame.image.load(os.path.join('Assets', 'space.png'))
+BACKGROUND_IMAGE = pygame.image.load(os.path.join('Assets', 'space1.png'))
 BACKGROUND = pygame.transform.scale(BACKGROUND_IMAGE, (WIDTH, HEIGHT))
 
 BIG_BULLET_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Big_bullet.png')), (20, 20))
@@ -60,7 +62,9 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health,
  yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit):
     
     WIN.blit(BACKGROUND, (0, 0))
+    pygame.draw.rect(WIN, CYAN, BORDER_FIELD)
     pygame.draw.rect(WIN, BORDO, BORDER)
+
     red_health_text = HEALTH_FONT.render(
         str(int(red_health))+'%', 1,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
@@ -69,14 +73,14 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health,
     # red health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(721, 21, 148, 23)))
-    pygame.draw.rect(WIN, RED, (pygame.Rect(720, 20, red_health*1.5, 25)))
+    pygame.draw.rect(WIN, (200, 0, 50), (pygame.Rect(720, 20, red_health*1.5, 25)))
     #yellow health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(28, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(31, 21, 148, 23)))
-    pygame.draw.rect(WIN, YELLOW, (pygame.Rect(30, 20, yellow_health * 1.5, 25)))
+    pygame.draw.rect(WIN, (245, 197, 28), (pygame.Rect(30, 20, yellow_health * 1.5, 25)))
 
-    WIN.blit(red_health_text, (722, 18))
-    WIN.blit(yellow_health_text, (32, 18))
+    WIN.blit(red_health_text, (724, 20))
+    WIN.blit(yellow_health_text, (34, 20))
 
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
@@ -158,12 +162,17 @@ def handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets,
             red_b_bullets.remove(bullet)
 
 
-def draw_winner(text):    
+def draw_winner(text):
+    instruction = 'Press Space to Restart'
+    WIN.blit(BACKGROUND, (0, 0))
     draw_text = WINNER_FONT.render(text, 1, WHITE)
+    draw_instr = HEALTH_FONT.render(instruction, 1, WHITE)
     WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2,
                          HEIGHT//2 - draw_text.get_height()//2))
+    WIN.blit(draw_instr, (WIDTH//2 - draw_instr.get_width()//2,
+                         400))
     pygame.display.update()
-    pygame.time.delay(1000)    
+    pygame.time.delay(100)
 
 
 def main():
@@ -252,7 +261,7 @@ def main():
             draw_winner(winner_text)
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:            
+                    if event.key == pygame.K_SPACE:
                         run = False        
 
         keys_pressed = pygame.key.get_pressed()

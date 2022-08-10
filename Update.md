@@ -15,3 +15,5 @@
 ### 10.04.2022: 
 >Game now restarts after pressing ***ESC***, minor QoL changes.
 
+### 10.08.2022:
+>Improved end of game screen, Changed middle border, QOL changes.
