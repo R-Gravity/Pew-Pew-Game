@@ -14,7 +14,7 @@ pygame.display.set_caption('Pew Pew Game')
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-BORDO = (155, 0, 50)
+MAROON = (155, 0, 50)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 CYAN = (137, 238, 240)
@@ -26,6 +26,7 @@ BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gun+Silencer.mp3'))
 
 HEALTH_FONT = pygame.font.SysFont('Arial', 23)
+GAME_FONT = pygame.font.SysFont('Sans', 50)
 WINNER_FONT = pygame.font.SysFont('Arial', 100)
 
 FPS = 60
@@ -59,29 +60,28 @@ CRIT_HIT_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets',
 
 
 def draw_window(red, yellow, red_bullets, yellow_bullets, red_health,
- yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit):
+                yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit):
     
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, CYAN, BORDER_FIELD)
-    pygame.draw.rect(WIN, BORDO, BORDER)
+    pygame.draw.rect(WIN, MAROON, BORDER)
 
     red_health_text = HEALTH_FONT.render(
-        str(int(red_health))+'%', 1,  WHITE)
+        str(int(red_health))+'%', True,  WHITE)
     yellow_health_text = HEALTH_FONT.render(
-        str(int(yellow_health))+'%', 1, BORDO)
+        str(int(yellow_health))+'%', True, MAROON)
    
     # red health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(718, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(721, 21, 148, 23)))
     pygame.draw.rect(WIN, (200, 0, 50), (pygame.Rect(720, 20, red_health*1.5, 25)))
-    #yellow health bars
+    # yellow health bars
     pygame.draw.rect(WIN, WHITE, (pygame.Rect(28, 18, 154, 29)))
     pygame.draw.rect(WIN, BLACK, (pygame.Rect(31, 21, 148, 23)))
     pygame.draw.rect(WIN, (245, 197, 28), (pygame.Rect(30, 20, yellow_health * 1.5, 25)))
 
     WIN.blit(red_health_text, (724, 20))
     WIN.blit(yellow_health_text, (34, 20))
-
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
@@ -96,14 +96,13 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health,
     for bullet in yellow_b_bullets:
         WIN.blit(BIG_BULLET_IMAGE, (bullet.x, bullet.y))
     
-    #displaying critical hits
+    # displaying critical hits
     for hit in red_crit_hit:
         WIN.blit(CRIT_HIT_IMAGE, (red.x, red.y))        
         red_crit_hit.remove(hit)
     for hit in yellow_crit_hit:
         WIN.blit(CRIT_HIT_IMAGE, (yellow.x, yellow.y))        
         yellow_crit_hit.remove(hit)
-
 
     pygame.display.update()
 
@@ -165,20 +164,61 @@ def handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets,
 def draw_winner(text):
     instruction = 'Press Space to Restart'
     WIN.blit(BACKGROUND, (0, 0))
-    draw_text = WINNER_FONT.render(text, 1, WHITE)
-    draw_instr = HEALTH_FONT.render(instruction, 1, WHITE)
+    draw_text = WINNER_FONT.render(text, True, WHITE)
+    draw_instr = HEALTH_FONT.render(instruction, True, WHITE)
     WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2,
                          HEIGHT//2 - draw_text.get_height()//2))
     WIN.blit(draw_instr, (WIDTH//2 - draw_instr.get_width()//2,
-                         400))
+                          400))
     pygame.display.update()
     pygame.time.delay(100)
+
+
+def main_menu():
+    game_name = 'SHOOT THE MOTHERFUCKER!'
+    instruction = 'Press Space to Start'
+    pos_x = 350
+    pos_y = 350
+    down_slide = True
+
+    clock = pygame.time.Clock()
+    menu_true = True
+    while menu_true:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    menu_true = False
+
+# the instruction text jumping up and down, open to refactoring when i'm better.
+        if pos_y == 400:
+            down_slide = False
+        elif pos_y == 350:
+            down_slide = True
+
+        if down_slide:
+            pos_y += 1
+        else:
+            pos_y -= 1
+
+        WIN.blit(BACKGROUND, (0, 0))
+        draw_game_name = GAME_FONT.render(game_name, True, CYAN)
+        draw_instr = HEALTH_FONT.render(instruction, True, WHITE)
+        WIN.blit(draw_game_name, (120, 200))
+        WIN.blit(draw_instr, (pos_x, pos_y))
+
+
+        pygame.display.update()
 
 
 def main():
     red = pygame.Rect(800, 229, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 230, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
-
 
     red_bullets = []
     yellow_bullets = []
@@ -186,7 +226,7 @@ def main():
     red_b_bullets = []
     red_crit_hit = []
     yellow_crit_hit = []
-    critFrame = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    crit_frame = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     red_health = 100
     yellow_health = 100
@@ -200,6 +240,12 @@ def main():
                 run = False
                 pygame.quit()
                 sys.exit()
+
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+                    main_menu()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_g and len(yellow_bullets) < MAX_BULLETS:
@@ -229,7 +275,7 @@ def main():
                 if crit_chance in range(0, 11):
                     red_health -= 6
                     BULLET_HIT_SOUND.play()
-                    red_crit_hit += critFrame   
+                    red_crit_hit += crit_frame
                 else:
                     red_health -= 4
                     BULLET_HIT_SOUND.play()
@@ -238,11 +284,11 @@ def main():
                 BULLET_HIT_SOUND.play()
 
             if event.type == YELLOW_HIT:
-                crit_chance = random.randrange(1,100)
+                crit_chance = random.randrange(1, 100)
                 if crit_chance in range(0, 11):
                     yellow_health -= 6
                     BULLET_HIT_SOUND.play()
-                    yellow_crit_hit += critFrame    
+                    yellow_crit_hit += crit_frame
                 else:
                     yellow_health -= 4
                     BULLET_HIT_SOUND.play()
@@ -262,17 +308,21 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        run = False        
+                        run = False
+
+
 
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
         red_handle_movement(keys_pressed, red)
         handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets, yellow, red)
         draw_window(
-            red, yellow, red_bullets, yellow_bullets, red_health, yellow_health, red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit)
-        
+            red, yellow, red_bullets, yellow_bullets, red_health, yellow_health,
+            red_b_bullets, yellow_b_bullets, red_crit_hit, yellow_crit_hit)
+
     main()
 
 
 if __name__ == '__main__':
+    main_menu()
     main()
