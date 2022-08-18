@@ -162,16 +162,37 @@ def handle_bullets(yellow_bullets, red_bullets, yellow_b_bullets, red_b_bullets,
 
 
 def draw_winner(text):
+    winner_screen = True
     instruction = 'Press Space to Restart'
-    WIN.blit(BACKGROUND, (0, 0))
-    draw_text = WINNER_FONT.render(text, True, WHITE)
-    draw_instr = HEALTH_FONT.render(instruction, True, WHITE)
-    WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2,
-                         HEIGHT//2 - draw_text.get_height()//2))
-    WIN.blit(draw_instr, (WIDTH//2 - draw_instr.get_width()//2,
-                          400))
-    pygame.display.update()
-    pygame.time.delay(100)
+
+    clock = pygame.time.Clock()
+
+    while winner_screen:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                winner_screen = False
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    winner_screen = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    winner_screen = False
+                    main_menu()
+
+        WIN.blit(BACKGROUND, (0, 0))
+        draw_text = WINNER_FONT.render(text, True, WHITE)
+        draw_instr = HEALTH_FONT.render(instruction, True, WHITE)
+        WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2,
+                             HEIGHT//2 - draw_text.get_height()//2))
+        WIN.blit(draw_instr, (WIDTH//2 - draw_instr.get_width()//2,
+                              400))
+
+        pygame.display.update()
 
 
 def main_menu():
@@ -187,7 +208,7 @@ def main_menu():
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                menu_true = False
                 pygame.quit()
                 sys.exit()
 
@@ -195,7 +216,7 @@ def main_menu():
                 if event.key == pygame.K_SPACE:
                     menu_true = False
 
-# the instruction text jumping up and down, open to refactoring when i'm better.
+# the instruction text jumping up and down, open to refactoring when I'm better.
         if pos_y == 400:
             down_slide = False
         elif pos_y == 350:
@@ -211,7 +232,6 @@ def main_menu():
         draw_instr = HEALTH_FONT.render(instruction, True, WHITE)
         WIN.blit(draw_game_name, (120, 200))
         WIN.blit(draw_instr, (pos_x, pos_y))
-
 
         pygame.display.update()
 
@@ -231,6 +251,8 @@ def main():
     red_health = 100
     yellow_health = 100
 
+    winner_text = ''
+
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -241,11 +263,14 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False
                     main_menu()
+
+            if winner_text != '':
+                run = False
+                draw_winner(winner_text)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_g and len(yellow_bullets) < MAX_BULLETS:
@@ -296,21 +321,11 @@ def main():
                 yellow_health -= 9
                 BULLET_HIT_SOUND.play()            
 
-        winner_text = ''
         if red_health <= 0:
             winner_text = 'YELLOW WINS!'
 
         if yellow_health <= 0:
             winner_text = 'RED WINS!'
-
-        if winner_text != '':
-            draw_winner(winner_text)
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        run = False
-
-
 
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
