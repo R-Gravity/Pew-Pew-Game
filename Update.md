@@ -19,7 +19,7 @@
 >Improved end of game screen, Changed middle border, QOL changes.
 
 ### 18.08.2022:
->Implemented main manu, ESC key now closes the main loop and returns to Main menu.
+>Implemented main menu, ESC key now closes the main loop and returns to Main menu.
 
 ### 18.08.2022 (2):
->Improved winner screen implementation, can now go to main manu from winner screen
+>Improved winner screen implementation, can now go to main menu from winner screen
